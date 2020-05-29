@@ -1,0 +1,101 @@
+<Grid>
+        <Border>
+            <Grid Margin="30 5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding MyTitle}" FontWeight="Bold" VerticalAlignment="Center" Margin="0 0 0 20" FontSize="30" ></TextBlock>
+                <TextBlock VerticalAlignment="Bottom" FontSize="25" Foreground="#878787" FontWeight="ExtraBlack" Text="------------------------------------------------"></TextBlock>
+                <TextBlock Grid.Row="1" Text="{Binding MyContent}" FontSize="25" Margin="10 0 0 0" FontWeight="ExtraBlack" VerticalAlignment="Center"></TextBlock>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type Button}">
+                            <Setter Property="Width" Value="150"></Setter>
+                            <Setter Property="Height" Value="50"></Setter>
+                            <Setter Property="Margin" Value="0 0 30 0"></Setter>
+                            <Setter Property="Background" Value="#19BE6B"></Setter>
+                            <Setter Property="Foreground" Value="White"></Setter>
+                            <Setter Property="FontSize" Value="20"></Setter>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Button}">
+                                        <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                                            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center"></ContentPresenter>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="Orange"></Setter>
+                                                <Setter Property="FontSize" Value="25"></Setter>
+                                                <Setter Property="Cursor" Value="Hand"></Setter>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Click="Yes_Click">确定</Button>
+                    <Button Click="No_Click">取消</Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+    
+    
+    public partial class ConfirmBox : Window
+    {
+        /// <summary>
+        /// 确认对话框
+        /// </summary>
+        /// <param name="title">标题</param>
+        /// <param name="content">内容</param>
+        public ConfirmBox(string title, string content)
+        {
+            DataContext = this;
+            MyTitle = title;
+            MyContent=content;
+            InitializeComponent();        
+        }
+        /// <summary>
+        /// 结果
+        /// </summary>
+        public bool Result { get; set; }
+
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string MyTitle { get; set; }
+        
+        /// <summary>
+        ///内容 
+        /// </summary>
+        public string MyContent { get; set; }
+
+        private void Yes_Click(object sender, RoutedEventArgs e)
+        {
+            Result = true;
+            Close();
+        }
+
+        private void No_Click(object sender, RoutedEventArgs e)
+        {
+            Result = false;
+            Close();
+        }
+
+        /// <summary>
+        /// 确认对话框
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        public static bool Show(string title, string content)
+        {
+            ConfirmBox confirmBox = new ConfirmBox(title, content);
+            confirmBox.ShowDialog();
+            return confirmBox.Result;
+        }
+
+    }
