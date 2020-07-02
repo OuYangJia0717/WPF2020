@@ -1,0 +1,30 @@
+1.右键，打开项目属性->安全性选项
+2.启用ClickOnce安全设置，然后选中这是部分可信的应用程序，再点击编辑权限，编辑生成的“app.manifest”文件
+3.将app.manifest文件中的这句代码中的level
+  <requestedExecutionLevel level="asInvoker" uiAccess="false" />  
+  改为如下：
+  <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />  
+  保存app.manifest文件，然后再将项目属性安全性选项中的启用ClickOnce安全设置去掉，重新编译项目即可，不去掉的话，是没法编译通过的哦。生成好后，软件就自动带上了那个安全图标了
+  再点击，就会自动弹出那个用户账户控制对话框，选中是就可以了。
+  
+  
+获取Mac地址
+string EthernetPath=string.Empty;    //Mac
+            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();  //计算机网络接口对象
+            if (nics == null || nics.Length < 1)
+            {
+                MessageBox.Show(" No network interfaces found.");
+                return;
+            }
+            foreach (NetworkInterface adapter in nics)
+            {
+                IPInterfaceProperties properties = adapter.GetIPProperties(); //  .GetIPInterfaceProperties();
+                string Description = adapter.Description;//接口的描述
+                string NetworkInterfaceType = adapter.NetworkInterfaceType.ToString();//获取接口类型
+                string address = adapter.GetPhysicalAddress().ToString();//返回MAC地址
+                if ( NetworkInterfaceType == "Ethernet" && !Description.Contains("Bluetooth")) 
+                {
+                    EthernetPath = address;
+                    break;
+                }                   
+            }
