@@ -1,0 +1,155 @@
+class Program
+    {
+        static void Main(string[] args)
+        {
+            GenerateXmlFile(); //生成xml文件
+            ReadXml();  //解析xml文件 
+        }
+
+        static void GenerateXmlFile() 
+        {
+            string xmlnsAttr = "http://www.3gpp.org/ftp/specs/archive/32_series/32.645#utranNrm";
+            string xmlnsXsiAttr = "http://www.w3.org/2001/XMLSchema-instance";
+            string xsiSchemaLocAttr = "http://www.3gpp.org/ftp/specs/archive/32_series/32.645#utranNrm swUpgrade.xsd";
+
+
+            XmlDocument xmlDoc = new XmlDocument();
+            ////加入XML的声明段落
+            XmlDeclaration declaration =xmlDoc.CreateXmlDeclaration("1.0", "UTF-8", null);   //创建一个具有指定值的 System.Xml.XmlDeclaration 节点
+            xmlDoc.AppendChild(declaration);    // 将指定的节点添加到该节点的子节点列表的末尾。
+
+            XmlElement element=xmlDoc.CreateElement("swUpgrade");  // 创建具有指定名称的元素。
+            element.SetAttribute("xmlns",xmlnsAttr);  // 设置具有指定名称的属性的值
+            element.SetAttribute("xmlns:xsi",xmlnsXsiAttr);
+            element.SetAttribute("xsi:schemaLocation",xsiSchemaLocAttr);
+            xmlDoc.AppendChild(element);
+
+            XmlElement root = AddNode(xmlDoc,element, "Root","","") ;
+
+            XmlElement beijin = AddNode(xmlDoc, root, "province", "name", "北京");
+            XmlElement cyq = AddNode(xmlDoc,beijin,"city","name", "朝阳区");
+            AddNode(xmlDoc, cyq, "district", new Dictionary<string, string> { { "name", "三环到四环之间" }, { "zipcode", "2819" } });
+            AddNode(xmlDoc, cyq, "district", new Dictionary<string, string> { { "name", "四环到五环之间" }, { "zipcode", "2839" } });
+            AddNode(xmlDoc, cyq, "district", new Dictionary<string, string> { { "name", "五环到六环之间" }, { "zipcode", "2840" } });
+            AddNode(xmlDoc, cyq, "district", new Dictionary<string, string> { { "name", "管庄" }, { "zipcode", "4137" } });
+            AddNode(xmlDoc, cyq, "district", new Dictionary<string, string> { { "name", "北苑" }, { "zipcode", "4139" } });
+            AddNode(xmlDoc, cyq, "district", new Dictionary<string, string> { { "name", "定福庄" }, { "zipcode", "4211" } });
+            AddNode(xmlDoc, cyq, "district", new Dictionary<string, string> { { "name", "三环以内" }, { "zipcode", "2799" } });
+
+            XmlElement hdq = AddNode(xmlDoc,beijin,"city", "name", "海淀区");
+            AddNode(xmlDoc, hdq, "district", new Dictionary<string, string> { { "name", "三环到四环之间" }, { "zipcode", "2849" } });
+            AddNode(xmlDoc, hdq, "district", new Dictionary<string, string> { { "name", "四环到五环之间" }, { "zipcode", "2850" } });
+            AddNode(xmlDoc, hdq, "district", new Dictionary<string, string> { { "name", "五环到六环之间" }, { "zipcode", "2851" } });
+            AddNode(xmlDoc, hdq, "district", new Dictionary<string, string> { { "name", "六环以外" }, { "zipcode", "2852" } });
+            AddNode(xmlDoc, hdq, "district", new Dictionary<string, string> { { "name", "西三旗" }, { "zipcode", "4134" } });
+            AddNode(xmlDoc, hdq, "district", new Dictionary<string, string> { { "name", "西四旗" }, { "zipcode", "4209" } });
+
+            XmlElement shanghai = AddNode(xmlDoc,root, "province", "name", "上海");
+            XmlElement hpq = AddNode(xmlDoc,shanghai, "city", "name", "黄浦区");
+            AddNode(xmlDoc, hpq, "district", new Dictionary<string, string> { { "name", "城区" }, { "zipcode", "51978" } });
+
+            XmlElement bsq = AddNode(xmlDoc,shanghai, "city", "name", "宝山区");
+            AddNode(xmlDoc,bsq, "district",new Dictionary<string, string> { {"name", "罗店镇" },{ "zipcode", "51911" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "城区" }, { "zipcode", "51921" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "大场镇" }, { "zipcode", "51912" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "杨行镇" }, { "zipcode", "51913" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "月浦镇" }, { "zipcode", "51914" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "罗泾镇" }, { "zipcode", "51915" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "顾村镇" }, { "zipcode", "51916" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "高境镇" }, { "zipcode", "51917" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "庙行镇" }, { "zipcode", "51918" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "淞南镇" }, { "zipcode", "51919" } });
+            AddNode(xmlDoc, bsq, "district", new Dictionary<string, string> { { "name", "宝山城市工业园区" }, { "zipcode", "51920" } });           
+            xmlDoc.Save(@"C:\Users\OuYe\source\repos\XmlHelper\test.xml");
+        }
+
+        /// <summary>
+        /// 添加多个属性
+        /// </summary>
+        static void AddNode(XmlDocument document,XmlElement root,string name,Dictionary<string,string> attributes) 
+        {
+            XmlElement element =document.CreateElement(name);
+            if (attributes != null &&attributes.Count > 0) 
+            {
+                foreach (string a in attributes.Keys) 
+                {
+                    if (!string.IsNullOrEmpty(a) && !string.IsNullOrEmpty(attributes[a]))
+                        element.SetAttribute(a, attributes[a]);
+                }
+            }
+            root.AppendChild(element);
+        }
+
+        /// <summary>
+        /// 添加单个属性
+        /// </summary>
+        static XmlElement AddNode(XmlDocument document, XmlElement root, string name, string attributeName,string attributeValue)
+        {
+            XmlElement element = document.CreateElement(name);
+            if(!string.IsNullOrEmpty(attributeName) && !string.IsNullOrEmpty(attributeValue))
+                element.SetAttribute(attributeName, attributeValue);
+            root.AppendChild(element);
+            return element;
+        }
+
+        static void ReadXml()
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.Load(@"C:\Users\OuYe\source\repos\XmlHelper\test.xml");
+            XmlNode rootNode = xmlDocument.GetElementsByTagName("swUpgrade")[0].FirstChild;
+                XmlNodeList provinces = rootNode.ChildNodes;
+
+                List<Province> listPro = new List<Province>();
+                foreach (XmlNode province in provinces)
+                {
+                    Province p = new Province();
+                    p.Name = province.Attributes.GetNamedItem("name").InnerText;
+                    XmlNodeList cities = province.ChildNodes;
+                    List<City> listCity = new List<City>();
+                    foreach (XmlNode city in cities)
+                    {
+                        City c = new City();
+                        c.Name = city.Attributes.GetNamedItem("name").InnerText;
+                        XmlNodeList districts = city.ChildNodes;
+                        List<District> listDis = new List<District>();
+                        foreach (XmlNode district in districts)
+                        {
+                            District d = new District();
+                            d.Name = district.Attributes.GetNamedItem("name").InnerText;
+                            d.ZipCode = district.Attributes.GetNamedItem("zipcode").InnerText;
+                            listDis.Add(d);
+                        }
+                        c.Districts = listDis;
+                        listCity.Add(c);
+                    }
+                    p.Cities = listCity;
+                    listPro.Add(p);
+                }
+                Root root = new Root() { provinces = listPro };        
+        }
+    }
+    public class Root 
+    {
+        public List<Province> provinces { get; set; }
+    }
+
+    public class Province 
+    {
+        public string Name { get; set; }
+
+        public List<City> Cities { get; set; }
+    }
+
+    public class City
+    {
+        public string Name { get; set; }
+
+        public List<District> Districts { get; set; }
+    }
+
+    public class District 
+    {
+        public string Name { get; set; }
+
+        public string ZipCode { get; set; }
+    }
