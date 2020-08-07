@@ -1,0 +1,42 @@
+private string Object2Xml<T>(T t)
+        {
+            PropertyInfo[] properties = t.GetType().GetProperties();   //获取对象所有属性
+            StringBuilder stringBuilder = null;
+            for (int i = 0; i < properties.Length; i++)
+            {
+                if (i == 0)
+                {
+                    stringBuilder = new StringBuilder();
+                    stringBuilder.Append("<Request>");
+                }
+                var property = properties[i];
+                stringBuilder.Append($"<{property.Name}>{property.GetValue(t)}</{property.Name}>");
+                if (i == properties.Length - 1)
+                {
+                    stringBuilder.Append("</Request>");
+                }
+            }
+            if (stringBuilder == null)
+                return null;
+            return stringBuilder.ToString();
+        }
+
+        private T Xml2Object<T>(string xml)
+        {
+            T t = Activator.CreateInstance<T>();
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xml);
+            foreach (XmlNode node in xmlDoc.FirstChild.ChildNodes)
+            {
+                foreach (var p in t.GetType().GetProperties())
+                {
+                    if (node.Name == p.Name)
+                    {
+                        p.SetValue(t, node.InnerText);
+                        break;
+                    }
+                }
+            }
+            return t;
+        }
