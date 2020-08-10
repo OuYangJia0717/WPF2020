@@ -1,0 +1,133 @@
+ <!--数据验证资源-->
+ <Window.Resources>
+        <ControlTemplate x:Key="ErrorTemplate" TargetType="Control">
+            <!--边框-->
+            <Border BorderBrush="Transparent" BorderThickness="2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <AdornedElementPlaceholder/>
+                    <!--异常内容-->
+                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="Red" Grid.Column="1" Text="{Binding [0].ErrorContent}"></TextBlock>
+                </Grid>
+            </Border>
+        </ControlTemplate>
+
+        <Style TargetType="Control" x:Key="ValidatableControlStyle">
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}">
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <!--验证错误模板-->
+        <TextBox   Grid.Row="2" Grid.Column="1" Height="30" Width="200" Validation.ErrorTemplate="{StaticResource ErrorTemplate}">
+            <TextBox.Text>
+                <Binding Path="Age" TargetNullValue="" 
+                             Mode="TwoWay"
+                             ValidatesOnExceptions="False" NotifyOnValidationError="False" 
+                             ValidatesOnDataErrors="False"
+                             UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <local:RequiredValidationRule Message="必填" ValidatesOnTargetUpdated="False"/>
+                        <local:AgeRangeRule/>
+                    </Binding.ValidationRules>
+                </Binding>
+            </TextBox.Text>
+        </TextBox>
+    </Grid>
+    
+    public class RequiredValidationRule : ValidationRule
+    {
+        /// <summary>
+        /// 强制要求。
+        /// </summary>
+
+        public string Message
+        {
+            get;
+            set;
+        }
+
+        public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            if (String.IsNullOrEmpty((string)value))
+            {
+                return new ValidationResult(false, Message);
+            }
+            return ValidationResult.ValidResult;
+        }
+        //public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        //{
+        //    if (value == null)
+        //        return new ValidationResult(false, "不能为空值！");
+        //    if (string.IsNullOrEmpty(value.ToString()))
+        //        return new ValidationResult(false, "不能为空字符串！");
+
+        //    return new ValidationResult(true, null);
+        //}
+    }
+
+    public class AgeRangeRule : ValidationRule
+    {
+        private int _min = 0;
+        private int _max = 100;
+
+        public AgeRangeRule()
+        {
+        }
+
+        public int Min
+        {
+            get { return _min; }
+            set { _min = value; }
+        }
+
+        public int Max
+        {
+            get { return _max; }
+            set { _max = value; }
+        }
+
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            int age = 0;
+
+            try
+            {
+                if (((string)value).Length > 0)
+                    age = Int32.Parse((String)value);
+            }
+            catch (Exception e)
+            {
+                return new ValidationResult(false, "数字");
+            }
+
+            if (age < Min)
+            {
+                return new ValidationResult(false,
+                    $"≥{Min}");
+            }
+            else if (age > Max)
+            {
+                return new ValidationResult(false,
+                    $"≤{Max}");
+            }
+            else
+            {
+                return new ValidationResult(true, null);
+            }
+        }
+    }
+    
+    
