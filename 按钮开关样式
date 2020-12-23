@@ -1,0 +1,52 @@
+<Grid>
+        <CheckBox HorizontalAlignment="Center" VerticalAlignment="Center">
+            <CheckBox.Style>
+                <Style TargetType="CheckBox">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="CheckBox">
+                                <Border Name="border" Background="#4A9E4A" Width="100" Height="35" CornerRadius="15">
+                                    <StackPanel Orientation="Horizontal">
+                                        <!--白色的球-->
+                                        <Ellipse Margin="6 1 10 0" Width="30" Height="30" Fill="White">
+                                            <Ellipse.RenderTransform>
+                                                <TranslateTransform x:Name="translate" X="0"></TranslateTransform>
+                                            </Ellipse.RenderTransform>
+                                        </Ellipse>
+                                        <!--文本内容-->
+                                        <TextBlock Name="txt" Text="关闭" FontSize="18" Foreground="White" VerticalAlignment="Center">
+                                            <TextBlock.RenderTransform>
+                                                <TranslateTransform x:Name="txtTranslate" X="0"></TranslateTransform>
+                                            </TextBlock.RenderTransform>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="txt" Property="Text" Value="开启"></Setter>
+                                        <Setter TargetName="border" Property="Background" Value="#0CC50C"></Setter>
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="translate" Storyboard.TargetProperty="X" To="58" Duration="0:0:0.2"></DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="txtTranslate" Storyboard.TargetProperty="X" To="-36" Duration="0:0:0.2"></DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="translate" Storyboard.TargetProperty="X" To="0" Duration="0:0:0.2"></DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="txtTranslate" Storyboard.TargetProperty="X" To="0" Duration="0:0:0.2"></DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>
+    </Grid>
