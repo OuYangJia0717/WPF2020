@@ -1,0 +1,39 @@
+ 
+ <Window.Resources>
+        <Style TargetType="CheckBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Rectangle Name="rec" Height="{Binding ElementName=txt,Path=ActualHeight}" Width="{Binding RelativeSource={RelativeSource Mode=Self},Path=ActualHeight}"></Rectangle>
+                            <TextBlock Text="L" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" RenderTransformOrigin="0.5,0.5">
+                                <TextBlock.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="1" ScaleY="-1"></ScaleTransform>   <!--缩放，可以翻转-->
+                                        <RotateTransform Angle="225"></RotateTransform>            <!--根据角度转换-->
+                                    </TransformGroup>
+                                </TextBlock.RenderTransform></TextBlock>
+                            <TextBlock Margin="5 0 0 0" Text="{TemplateBinding Content}" Grid.Column="1" Name="txt"></TextBlock>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="rec" Property="Fill" Value="#FF007ACC"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="rec" Property="Fill" Value="LightGray"></Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <CheckBox Content="Check Me Please" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="36"></CheckBox>
+    </Grid>
