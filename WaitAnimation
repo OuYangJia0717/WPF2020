@@ -1,0 +1,71 @@
+<Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type Ellipse}">
+                <Setter Property="Height" Value="10"></Setter>
+                <Setter Property="Width" Value="10"></Setter>
+                <Setter Property="Fill" Value="Black"></Setter>
+                <Setter Property="Margin" Value="5 0 0 0"></Setter>
+            </Style>
+
+            <Style TargetType="TextBlock" x:Key="textBlockStyle">
+                <Setter Property="FontSize" Value="20"></Setter>
+                <Style.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:2" RepeatBehavior="Forever"></DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Storyboard x:Key="EllipseAnimation" Duration="0:0:4" RepeatBehavior="Forever">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="e1" Storyboard.TargetProperty="Opacity">
+                    <SplineDoubleKeyFrame KeyTime="0:0:0" Value="1"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0.5"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:2" Value="0"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:3" Value="0"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:4" Value="0"></SplineDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="e2" Storyboard.TargetProperty="Opacity">
+                    <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:1" Value="1"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:2" Value="0.5"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:3" Value="0"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:4" Value="0"></SplineDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="e3" Storyboard.TargetProperty="Opacity">
+                    <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:2" Value="1"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:3" Value="0.5"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:4" Value="0"></SplineDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="e4" Storyboard.TargetProperty="Opacity">
+                    <SplineDoubleKeyFrame KeyTime="0:0:0" Value="0"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:1" Value="0"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:2" Value="0"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:3" Value="1"></SplineDoubleKeyFrame>
+                    <SplineDoubleKeyFrame KeyTime="0:0:4" Value="0.5"></SplineDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+        </Grid.Resources>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Name="txt" Text="测试文字" Style="{StaticResource textBlockStyle}"></TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="5 0 0 0">
+                <StackPanel.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource EllipseAnimation}"></BeginStoryboard>
+                    </EventTrigger>
+                </StackPanel.Triggers>
+                <Ellipse x:Name="e1"></Ellipse>
+                <Ellipse x:Name="e2"></Ellipse>
+                <Ellipse x:Name="e3"></Ellipse>
+                <Ellipse x:Name="e4"></Ellipse>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
